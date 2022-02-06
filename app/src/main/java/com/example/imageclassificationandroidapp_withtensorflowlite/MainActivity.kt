@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.example.imageclassificationandroidapp_withtensorflowlite.databinding.ActivityMainBinding
 import com.example.imageclassificationandroidapp_withtensorflowlite.ml.BridsModel
+import com.example.imageclassificationandroidapp_withtensorflowlite.ml.FoodModel
 import org.tensorflow.lite.support.image.TensorImage
 import java.io.IOException
 
@@ -144,22 +145,32 @@ class MainActivity : AppCompatActivity() {
     private fun outputGenerator(bitmap: Bitmap) {
 //declaring tensor flow lite model variable
         val birdModel = BridsModel.newInstance(this)
+        val foodModel = FoodModel.newInstance(this)
 
         // converting bitmap into tensor flow image
         val newBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val tfimage = TensorImage.fromBitmap(newBitmap)
 
         //process the image using trained model and sort it in descending order
-        val outputs = birdModel.process(tfimage)
+        val outputs1 = birdModel.process(tfimage)
+            .probabilityAsCategoryList.apply {
+                sortByDescending { it.score }
+            }
+        val outputs2 = foodModel.process(tfimage)
             .probabilityAsCategoryList.apply {
                 sortByDescending { it.score }
             }
         //getting result having high Probability
-        val highProbabilityOutput = outputs[0]
+        val highProbabilityOutput1 = outputs1[0]
+        val highProbabilityOutput2 = outputs2[1]
 
         //setting output text
-        tvOutput.text = highProbabilityOutput.label
-        Log.i("TAG", "outputGenerator: $highProbabilityOutput")
+        tvOutput.text = highProbabilityOutput1.label
+        Log.i("TAG", "outputGenerator: $highProbabilityOutput1"
+        )
+        tvOutput.text = highProbabilityOutput2.label
+        Log.i("TAG", "outputGenerator: $highProbabilityOutput2"
+        )
     }
 
 
