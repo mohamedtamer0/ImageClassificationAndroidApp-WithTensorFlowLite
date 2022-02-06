@@ -69,8 +69,8 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
         android:text="Click on the result text to search on Google"
-        android:textColor="@color/white"
-        android:textSize="13sp"
+        android:textColor="@color/teal_200"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView" />
 
